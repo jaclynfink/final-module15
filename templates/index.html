@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<!--
+    Document Type Declaration (DOCTYPE)
+    
+    The <!DOCTYPE html> declaration defines the document type and version of HTML.
+    It ensures that the browser interprets the document as an HTML5 document.
+    This declaration is mandatory and should be the very first line in your HTML document.
+-->
+
+<html lang="en">
+<!--
+    <html> Tag
+    
+    The <html> element is the root element of an HTML page. It encapsulates all other elements
+    within the document. The lang="en" attribute specifies that the language of the document is English,
+    which aids in accessibility and SEO (Search Engine Optimization).
+-->
+<head>
+    <!--
+        <head> Section
+        
+        The <head> element contains meta-information about the HTML document, such as its title,
+        character set, linked resources like CSS and JavaScript files, and other metadata.
+        This information is not displayed directly on the web page.
+    -->
+    
+    <meta charset="UTF-8">
+    <!--
+        <meta> Tag: Character Set
+        
+        The <meta charset="UTF-8"> tag specifies the character encoding for the HTML document.
+        UTF-8 is a widely used encoding that supports virtually all characters from all languages,
+        ensuring that text is rendered correctly.
+    -->
+    
+    <title>Hello World & Calculator Demo</title>
+    <!--
+        <title> Tag
+        
+        The <title> element defines the title of the HTML document, which appears in the browser's
+        title bar or tab. It is also used by search engines to understand the content of the page.
+    -->
+    
+    <style>
+        /*
+            <style> Section: CSS Styles
+            
+            The <style> element allows you to embed CSS (Cascading Style Sheets) directly within
+            the HTML document. CSS is used to style and layout web pages, controlling aspects
+            like colors, fonts, spacing, and positioning.
+        */
+        
+        body {
+            /* 
+                Styles for the <body> Element
+                
+                - font-family: Sets the font for the entire page to Arial, sans-serif.
+                - text-align: Centers the text horizontally.
+                - margin-top: Adds a 50-pixel margin at the top of the page for spacing.
+            */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .calculator {
+            /* 
+                Styles for Elements with the "calculator" Class
+                
+                - margin-top: Adds a 30-pixel margin above the calculator section to separate it
+                  from other content.
+            */
+            margin-top: 30px;
+        }
+        
+        input {
+            /* 
+                Styles for <input> Elements
+                
+                - margin: Adds a 5-pixel margin around input fields for spacing.
+                - padding: Adds a 5-pixel padding inside input fields for better readability.
+            */
+            margin: 5px;
+            padding: 5px;
+        }
+        
+        button {
+            /* 
+                Styles for <button> Elements
+                
+                - padding: Adds 5 pixels of vertical padding and 10 pixels of horizontal padding
+                  inside buttons to make them larger and more clickable.
+            */
+            padding: 5px 10px;
+        }
+        
+        .result {
+            /* 
+                Styles for Elements with the "result" Class
+                
+                - margin-top: Adds a 10-pixel margin above the result display area.
+                - font-weight: Makes the text bold to emphasize the result.
+            */
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .auth-banner {
+            margin: 0 auto 20px;
+            max-width: 520px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            background: #f9fafb;
+        }
+
+        .auth-links {
+            margin-top: 10px;
+        }
+
+        .auth-links a,
+        .auth-links button {
+            margin: 0 6px;
+        }
+
+        .history {
+            margin: 28px auto 0;
+            max-width: 760px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px;
+            background: #ffffff;
+        }
+
+        .history ul {
+            padding-left: 20px;
+        }
+
+        .history li {
+            margin: 8px 0;
+        }
+
+        .history button {
+            margin-left: 8px;
+        }
+
+        .bread-panel {
+            margin: 24px auto;
+            max-width: 960px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px;
+            background: #ffffff;
+        }
+
+        .bread-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .bread-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 10px;
+            background: #fafafa;
+        }
+
+        .bread-card h4 {
+            margin: 0 0 8px;
+        }
+
+        .bread-card label {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+
+        .bread-card input,
+        .bread-card select,
+        .bread-card button {
+            width: 100%;
+            box-sizing: border-box;
+            margin: 4px 0 0;
+            padding: 7px;
+        }
+
+        .bread-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #1e3a8a;
+        }
+
+        .bread-feedback.error {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        <body> Section
+        
+        The <body> element contains all the contents of an HTML document, such as text, images,
+        links, buttons, and other media. Everything within the <body> tag is rendered on the
+        web page and visible to users.
+    -->
+    
+    <h1>Hello World</h1>
+
+    <div class="auth-banner">
+        <div id="auth-status">You are not logged in.</div>
+        <div class="auth-links">
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            <button id="logout-btn" style="display:none;">Logout</button>
+        </div>
+    </div>
+    <!--
+        <h1> Tag: Heading
+        
+        The <h1> element represents the most important heading on the page. It is typically used
+        for the main title or headline. Search engines give significant weight to <h1> tags for SEO.
+    -->
+    
+    <div class="calculator">
+        <!--
+            <div> Element with "calculator" Class
+            
+            The <div> element is a generic container used to group other elements. The class="calculator"
+            attribute assigns the "calculator" class to this <div>, allowing it to be styled using CSS.
+            This section contains the calculator interface, including input fields and buttons.
+        -->
+        
+        <h2>Calculator</h2>
+        <!--
+            <h2> Tag: Subheading
+            
+            The <h2> element represents a secondary heading, subordinate to <h1>. It introduces the
+            calculator section of the page.
+        -->
+        
+        <input type="number" id="a" placeholder="First number">
+        <!--
+            <input> Element: First Number Input
+            
+            - type="number": Specifies that the input should accept numeric values.
+            - id="a": Assigns a unique identifier "a" to this input, allowing it to be accessed via JavaScript.
+            - placeholder="First number": Displays the text "First number" inside the input field as a hint to the user.
+        -->
+        
+        <input type="number" id="b" placeholder="Second number"><br>
+        <!--
+            <input> Element: Second Number Input
+            
+            - type="number": Specifies that the input should accept numeric values.
+            - id="b": Assigns a unique identifier "b" to this input, allowing it to be accessed via JavaScript.
+            - placeholder="Second number": Displays the text "Second number" inside the input field as a hint to the user.
+            
+            <br> Tag: Line Break
+            
+            Inserts a line break after the second input field, moving subsequent elements to the next line.
+        -->
+        
+        <button onclick="calculate('add')">Add</button>
+        <!--
+            <button> Element: Add Button
+            
+            - onclick="calculate('add')": Sets up an event handler that calls the JavaScript function "calculate"
+              with the argument 'add' when the button is clicked.
+            - "Add": The text displayed on the button.
+        -->
+        
+        <button onclick="calculate('subtract')">Subtract</button>
+        <!--
+            <button> Element: Subtract Button
+            
+            - onclick="calculate('subtract')": Sets up an event handler that calls the JavaScript function "calculate"
+              with the argument 'subtract' when the button is clicked.
+            - "Subtract": The text displayed on the button.
+        -->
+        
+        <button onclick="calculate('multiply')">Multiply</button>
+        <!--
+            <button> Element: Multiply Button
+            
+            - onclick="calculate('multiply')": Sets up an event handler that calls the JavaScript function "calculate"
+              with the argument 'multiply' when the button is clicked.
+            - "Multiply": The text displayed on the button.
+        -->
+        
+        <button onclick="calculate('divide')">Divide</button>
+        <!--
+            <button> Element: Divide Button
+            
+            - onclick="calculate('divide')": Sets up an event handler that calls the JavaScript function "calculate"
+              with the argument 'divide' when the button is clicked.
+            - "Divide": The text displayed on the button.
+        -->
+        
+        <div class="result" id="result"></div>
+        <!--
+            <div> Element: Result Display
+            
+            - class="result": Assigns the "result" class to this <div>, allowing it to be styled using CSS.
+            - id="result": Assigns a unique identifier "result" to this <div>, enabling it to be accessed and manipulated via JavaScript.
+            
+            This <div> is used to display the result of the arithmetic operation or any error messages.
+        -->
+    </div>
+
+    <div class="history">
+        <h3>My Saved Calculations</h3>
+        <p id="history-status">Log in to view calculation history.</p>
+        <button id="refresh-history" type="button">Refresh</button>
+        <ul id="history-list"></ul>
+    </div>
+
+    <div class="bread-panel">
+        <h3>Calculation BREAD Actions</h3>
+        <div class="bread-grid">
+            <form id="add-form" class="bread-card">
+                <h4>Add (Create)</h4>
+                <label for="add-a">A</label>
+                <input id="add-a" name="a" type="number" step="any" required>
+                <label for="add-b">B</label>
+                <input id="add-b" name="b" type="number" step="any" required>
+                <label for="add-type">Type</label>
+                <select id="add-type" name="type" required>
+                    <option value="Add">Add</option>
+                    <option value="Sub">Sub</option>
+                    <option value="Multiply">Multiply</option>
+                    <option value="Divide">Divide</option>
+                </select>
+                <button type="submit">Create</button>
+            </form>
+
+            <form id="read-form" class="bread-card">
+                <h4>Read</h4>
+                <label for="read-id">Calculation ID</label>
+                <input id="read-id" name="id" type="number" step="1" min="1" required>
+                <button type="submit">Get by ID</button>
+            </form>
+
+            <form id="edit-form" class="bread-card">
+                <h4>Edit</h4>
+                <label for="edit-id">Calculation ID</label>
+                <input id="edit-id" name="id" type="number" step="1" min="1" required>
+                <label for="edit-a">A</label>
+                <input id="edit-a" name="a" type="number" step="any" required>
+                <label for="edit-b">B</label>
+                <input id="edit-b" name="b" type="number" step="any" required>
+                <label for="edit-type">Type</label>
+                <select id="edit-type" name="type" required>
+                    <option value="Add">Add</option>
+                    <option value="Sub">Sub</option>
+                    <option value="Multiply">Multiply</option>
+                    <option value="Divide">Divide</option>
+                </select>
+                <button type="submit">Update (PUT)</button>
+            </form>
+
+            <form id="delete-form" class="bread-card">
+                <h4>Delete</h4>
+                <label for="delete-id">Calculation ID</label>
+                <input id="delete-id" name="id" type="number" step="1" min="1" required>
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+
+        <div id="bread-feedback" class="bread-feedback hidden"></div>
+    </div>
+    
+    <script>
+        const VALID_TYPES = ['Add', 'Sub', 'Multiply', 'Divide'];
+
+        function showBreadFeedback(message, isError = false) {
+            const feedback = document.getElementById('bread-feedback');
+            feedback.classList.remove('hidden');
+            feedback.classList.toggle('error', isError);
+            feedback.innerText = message;
+        }
+
+        function getAuthHeaders() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                return null;
+            }
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            };
+        }
+
+        function ensureAuthHeaders() {
+            const headers = getAuthHeaders();
+            if (!headers) {
+                showBreadFeedback('Please log in first.', true);
+                return null;
+            }
+            return headers;
+        }
+
+        function parseFiniteNumber(rawValue, fieldName) {
+            const value = Number(rawValue);
+            if (!Number.isFinite(value)) {
+                throw new Error(`${fieldName} must be a valid number.`);
+            }
+            return value;
+        }
+
+        function parsePositiveInt(rawValue, fieldName) {
+            const value = Number(rawValue);
+            if (!Number.isInteger(value) || value < 1) {
+                throw new Error(`${fieldName} must be a positive integer.`);
+            }
+            return value;
+        }
+
+        function validateCalculationPayload(payload) {
+            if (!VALID_TYPES.includes(payload.type)) {
+                throw new Error('Type must be one of: Add, Sub, Multiply, Divide.');
+            }
+            if (payload.type === 'Divide' && payload.b === 0) {
+                throw new Error('Cannot divide by zero.');
+            }
+        }
+
+        function setHistoryStatus(message) {
+            document.getElementById('history-status').innerText = message;
+        }
+
+        function fillEditForm(item) {
+            document.getElementById('edit-id').value = item.id;
+            document.getElementById('edit-a').value = item.a;
+            document.getElementById('edit-b').value = item.b;
+            document.getElementById('edit-type').value = item.type;
+        }
+
+        function fillReadDeleteForms(calculationId) {
+            document.getElementById('read-id').value = calculationId;
+            document.getElementById('delete-id').value = calculationId;
+        }
+
+        function renderHistory(items) {
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+
+            for (const item of items) {
+                const row = document.createElement('li');
+                row.innerHTML = `#${item.id} — ${item.a} ${item.type} ${item.b}`;
+
+                const readBtn = document.createElement('button');
+                readBtn.type = 'button';
+                readBtn.innerText = 'Read';
+                readBtn.addEventListener('click', () => {
+                    fillReadDeleteForms(item.id);
+                    readCalculation(item.id);
+                });
+
+                const editBtn = document.createElement('button');
+                editBtn.type = 'button';
+                editBtn.innerText = 'Edit';
+                editBtn.addEventListener('click', () => {
+                    fillEditForm(item);
+                    showBreadFeedback(`Loaded calculation #${item.id} into Edit form.`);
+                });
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.innerText = 'Delete';
+                deleteBtn.addEventListener('click', () => {
+                    fillReadDeleteForms(item.id);
+                    deleteCalculation(item.id);
+                });
+
+                row.appendChild(readBtn);
+                row.appendChild(editBtn);
+                row.appendChild(deleteBtn);
+                historyList.appendChild(row);
+            }
+        }
+
+        async function loadCalculations() {
+            const headers = getAuthHeaders();
+            if (!headers) {
+                setHistoryStatus('Log in to view calculation history.');
+                renderHistory([]);
+                return;
+            }
+
+            const response = await fetch('/calculations', { method: 'GET', headers });
+            const data = await response.json();
+
+            if (!response.ok) {
+                setHistoryStatus(data.error || 'Unable to load calculations.');
+                renderHistory([]);
+                return;
+            }
+
+            setHistoryStatus(`Loaded ${data.length} calculation(s).`);
+            renderHistory(data);
+        }
+
+        async function createCalculation(payload) {
+            const headers = ensureAuthHeaders();
+            if (!headers) {
+                return;
+            }
+
+            const response = await fetch('/calculations', {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(payload),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Unable to create calculation.');
+            }
+
+            await loadCalculations();
+            showBreadFeedback(`Created calculation #${data.id}.`);
+        }
+
+        async function readCalculation(calculationId) {
+            const headers = ensureAuthHeaders();
+            if (!headers) {
+                return;
+            }
+
+            const response = await fetch(`/calculations/${calculationId}`, { headers });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Unable to read calculation.');
+            }
+
+            showBreadFeedback(`Read #${data.id}: a=${data.a}, b=${data.b}, type=${data.type}, result=${data.result}`);
+            fillEditForm(data);
+        }
+
+        async function updateCalculation(calculationId, payload) {
+            const headers = ensureAuthHeaders();
+            if (!headers) {
+                return;
+            }
+
+            const response = await fetch(`/calculations/${calculationId}`, {
+                method: 'PUT',
+                headers,
+                body: JSON.stringify(payload),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Unable to update calculation.');
+            }
+
+            await loadCalculations();
+            showBreadFeedback(`Updated calculation #${data.id}.`);
+        }
+
+        async function deleteCalculation(calculationId) {
+            const headers = ensureAuthHeaders();
+            if (!headers) {
+                return;
+            }
+
+            const response = await fetch(`/calculations/${calculationId}`, {
+                method: 'DELETE',
+                headers,
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.error || 'Unable to delete calculation.');
+            }
+
+            await loadCalculations();
+            showBreadFeedback(`Deleted calculation #${calculationId}.`);
+        }
+
+        function renderAuthState() {
+            const userRaw = localStorage.getItem('current_user');
+            const token = localStorage.getItem('access_token');
+            const authStatus = document.getElementById('auth-status');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (!userRaw || !token) {
+                authStatus.innerText = 'You are not logged in.';
+                logoutBtn.style.display = 'none';
+                setHistoryStatus('Log in to view calculation history.');
+                renderHistory([]);
+                return;
+            }
+
+            try {
+                const user = JSON.parse(userRaw);
+                authStatus.innerText = `Logged in as ${user.username}.`;
+                logoutBtn.style.display = 'inline-block';
+                loadCalculations();
+            } catch {
+                localStorage.removeItem('current_user');
+                localStorage.removeItem('access_token');
+                authStatus.innerText = 'You are not logged in.';
+                logoutBtn.style.display = 'none';
+                setHistoryStatus('Log in to view calculation history.');
+                renderHistory([]);
+            }
+        }
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('current_user');
+            localStorage.removeItem('access_token');
+            renderAuthState();
+            showBreadFeedback('Logged out.');
+        });
+
+        document.getElementById('refresh-history').addEventListener('click', () => {
+            loadCalculations();
+        });
+
+        document.getElementById('add-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            try {
+                const a = parseFiniteNumber(document.getElementById('add-a').value, 'A');
+                const b = parseFiniteNumber(document.getElementById('add-b').value, 'B');
+                const type = document.getElementById('add-type').value;
+                const payload = { a, b, type };
+                validateCalculationPayload(payload);
+                await createCalculation(payload);
+                event.target.reset();
+            } catch (error) {
+                showBreadFeedback(error.message, true);
+            }
+        });
+
+        document.getElementById('read-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            try {
+                const calculationId = parsePositiveInt(document.getElementById('read-id').value, 'Calculation ID');
+                await readCalculation(calculationId);
+            } catch (error) {
+                showBreadFeedback(error.message, true);
+            }
+        });
+
+        document.getElementById('edit-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            try {
+                const calculationId = parsePositiveInt(document.getElementById('edit-id').value, 'Calculation ID');
+                const a = parseFiniteNumber(document.getElementById('edit-a').value, 'A');
+                const b = parseFiniteNumber(document.getElementById('edit-b').value, 'B');
+                const type = document.getElementById('edit-type').value;
+                const payload = { a, b, type };
+                validateCalculationPayload(payload);
+                await updateCalculation(calculationId, payload);
+            } catch (error) {
+                showBreadFeedback(error.message, true);
+            }
+        });
+
+        document.getElementById('delete-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            try {
+                const calculationId = parsePositiveInt(document.getElementById('delete-id').value, 'Calculation ID');
+                await deleteCalculation(calculationId);
+                event.target.reset();
+            } catch (error) {
+                showBreadFeedback(error.message, true);
+            }
+        });
+
+        renderAuthState();
+
+        async function calculate(operation) {
+            const a = parseFloat(document.getElementById('a').value);
+            const b = parseFloat(document.getElementById('b').value);
+            const resultElement = document.getElementById('result');
+
+            const opTypeMap = {
+                add: 'Add',
+                subtract: 'Sub',
+                multiply: 'Multiply',
+                divide: 'Divide',
+            };
+            const mappedType = opTypeMap[operation];
+
+            try {
+                if (!Number.isFinite(a) || !Number.isFinite(b)) {
+                    throw new Error('Please enter valid numeric values for A and B.');
+                }
+                if (mappedType === 'Divide' && b === 0) {
+                    throw new Error('Cannot divide by zero.');
+                }
+
+                const response = await fetch('/' + operation, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ a, b })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Calculation failed.');
+                }
+
+                resultElement.innerText = 'Result: ' + data.result;
+
+                const headers = getAuthHeaders();
+                if (mappedType && headers) {
+                    await fetch('/calculations', {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify({ a, b, type: mappedType }),
+                    });
+                    await loadCalculations();
+                }
+            } catch (error) {
+                resultElement.innerText = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

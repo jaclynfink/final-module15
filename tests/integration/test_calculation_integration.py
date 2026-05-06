@@ -65,7 +65,7 @@ def test_insert_calculation_record_persists_expected_data(calc_db_session: Sessi
 
 @pytest.mark.integration
 def test_calculation_invalid_type_is_rejected_by_database_constraint(calc_db_session: Session) -> None:
-    invalid_record = Calculation(a=10, b=2, type="Power", result=100)
+    invalid_record = Calculation(a=10, b=2, type="UnknownType", result=100)
     calc_db_session.add(invalid_record)
 
     with pytest.raises(IntegrityError):

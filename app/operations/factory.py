@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from math import sqrt
 from typing import TypeAlias
 
 
@@ -37,6 +38,26 @@ class DivideStrategy(CalculationStrategy):
         return float(a / b)
 
 
+class ExponentiateStrategy(CalculationStrategy):
+    def execute(self, a: Number, b: Number) -> float:
+        return float(a**b)
+
+
+class ModulusStrategy(CalculationStrategy):
+    def execute(self, a: Number, b: Number) -> float:
+        if b == 0:
+            raise ValueError("Cannot take modulus by zero.")
+        return float(a % b)
+
+
+class SquareRootStrategy(CalculationStrategy):
+    def execute(self, a: Number, b: Number) -> float:
+        del b
+        if a < 0:
+            raise ValueError("Cannot compute square root of a negative number.")
+        return float(sqrt(a))
+
+
 class CalculationFactory:
     """Factory for creating calculation strategies by operation type."""
 
@@ -48,6 +69,15 @@ class CalculationFactory:
         "mul": MultiplyStrategy,
         "divide": DivideStrategy,
         "div": DivideStrategy,
+        "exponentiate": ExponentiateStrategy,
+        "power": ExponentiateStrategy,
+        "pow": ExponentiateStrategy,
+        "modulus": ModulusStrategy,
+        "mod": ModulusStrategy,
+        "modulo": ModulusStrategy,
+        "sqrt": SquareRootStrategy,
+        "square_root": SquareRootStrategy,
+        "squareroot": SquareRootStrategy,
     }
 
     @classmethod

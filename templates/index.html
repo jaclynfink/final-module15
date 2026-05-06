@@ -25,6 +25,9 @@
     -->
     
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!--
         <meta> Tag: Character Set
         
@@ -33,7 +36,7 @@
         ensuring that text is rendered correctly.
     -->
     
-    <title>Hello World & Calculator Demo</title>
+    <title>Calculator Application</title>
     <!--
         <title> Tag
         
@@ -42,6 +45,18 @@
     -->
     
     <style>
+        :root {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-soft: #f1f5f9;
+            --text: #0f172a;
+            --muted: #475569;
+            --border: #e2e8f0;
+            --primary: #374151;
+            --primary-hover: #1f2937;
+            --focus: #93c5fd;
+        }
+
         /*
             <style> Section: CSS Styles
             
@@ -58,9 +73,11 @@
                 - text-align: Centers the text horizontally.
                 - margin-top: Adds a 50-pixel margin at the top of the page for spacing.
             */
-            font-family: Arial, sans-serif;
+            font-family: 'Lora', serif;
             text-align: center;
             margin-top: 50px;
+            background: var(--bg);
+            color: var(--text);
         }
         
         .calculator {
@@ -81,7 +98,11 @@
                 - padding: Adds a 5-pixel padding inside input fields for better readability.
             */
             margin: 5px;
-            padding: 5px;
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text);
         }
         
         button {
@@ -91,7 +112,24 @@
                 - padding: Adds 5 pixels of vertical padding and 10 pixels of horizontal padding
                   inside buttons to make them larger and more clickable.
             */
-            padding: 5px 10px;
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #ffffff;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+        }
+
+        input:focus,
+        select:focus,
+        button:focus {
+            outline: 2px solid var(--focus);
+            outline-offset: 1px;
         }
         
         .result {
@@ -103,19 +141,26 @@
             */
             margin-top: 10px;
             font-weight: bold;
+            color: var(--muted);
         }
 
         .auth-banner {
-            margin: 0 auto 20px;
-            max-width: 520px;
+            position: fixed;
+            top: 14px;
+            right: 14px;
+            margin: 0;
+            max-width: 420px;
             border: 1px solid #e5e7eb;
             border-radius: 12px;
             padding: 12px;
-            background: #f9fafb;
+            background: var(--surface);
+            text-align: right;
+            z-index: 1000;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
         }
 
         .auth-links {
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .auth-links a,
@@ -123,14 +168,24 @@
             margin: 0 6px;
         }
 
+        .auth-links a {
+            color: var(--muted);
+            text-decoration: none;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
         .history {
             margin: 28px auto 0;
             max-width: 760px;
             text-align: left;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border);
             border-radius: 12px;
             padding: 14px;
-            background: #ffffff;
+            background: var(--surface);
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
         }
 
         .history ul {
@@ -149,10 +204,11 @@
             margin: 24px auto;
             max-width: 960px;
             text-align: left;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border);
             border-radius: 12px;
             padding: 14px;
-            background: #ffffff;
+            background: var(--surface);
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
         }
 
         .bread-grid {
@@ -162,10 +218,10 @@
         }
 
         .bread-card {
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border);
             border-radius: 10px;
             padding: 10px;
-            background: #fafafa;
+            background: var(--surface-soft);
         }
 
         .bread-card h4 {
@@ -185,19 +241,23 @@
             box-sizing: border-box;
             margin: 4px 0 0;
             padding: 7px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text);
         }
 
         .bread-feedback {
             margin-top: 10px;
             padding: 10px;
             border-radius: 8px;
-            background: #eff6ff;
-            color: #1e3a8a;
+            background: #eef2ff;
+            color: #3730a3;
         }
 
         .bread-feedback.error {
             background: #fef2f2;
-            color: #991b1b;
+            color: #b91c1c;
         }
 
         .hidden {
@@ -214,7 +274,7 @@
         web page and visible to users.
     -->
     
-    <h1>Hello World</h1>
+    <h1>Calculator Application</h1>
 
     <div class="auth-banner">
         <div id="auth-status">You are not logged in.</div>
@@ -238,14 +298,6 @@
             The <div> element is a generic container used to group other elements. The class="calculator"
             attribute assigns the "calculator" class to this <div>, allowing it to be styled using CSS.
             This section contains the calculator interface, including input fields and buttons.
-        -->
-        
-        <h2>Calculator</h2>
-        <!--
-            <h2> Tag: Subheading
-            
-            The <h2> element represents a secondary heading, subordinate to <h1>. It introduces the
-            calculator section of the page.
         -->
         
         <input type="number" id="a" placeholder="First number">
@@ -305,6 +357,12 @@
               with the argument 'divide' when the button is clicked.
             - "Divide": The text displayed on the button.
         -->
+
+        <button onclick="calculate('power')">Power</button>
+
+        <button onclick="calculate('modulus')">Modulus</button>
+
+        <button onclick="calculate('sqrt')">Square Root</button>
         
         <div class="result" id="result"></div>
         <!--
@@ -317,21 +375,14 @@
         -->
     </div>
 
-    <div class="history">
-        <h3>My Saved Calculations</h3>
-        <p id="history-status">Log in to view calculation history.</p>
-        <button id="refresh-history" type="button">Refresh</button>
-        <ul id="history-list"></ul>
-    </div>
-
     <div class="bread-panel">
-        <h3>Calculation BREAD Actions</h3>
+        <h3>Calculation BREAD Actions (B, R, E, A, D)</h3>
         <div class="bread-grid">
             <form id="add-form" class="bread-card">
-                <h4>Add (Create)</h4>
-                <label for="add-a">A</label>
+                <h4>Add (A)</h4>
+                <label for="add-a">First Number</label>
                 <input id="add-a" name="a" type="number" step="any" required>
-                <label for="add-b">B</label>
+                <label for="add-b">Second Number</label>
                 <input id="add-b" name="b" type="number" step="any" required>
                 <label for="add-type">Type</label>
                 <select id="add-type" name="type" required>
@@ -339,24 +390,27 @@
                     <option value="Sub">Sub</option>
                     <option value="Multiply">Multiply</option>
                     <option value="Divide">Divide</option>
+                    <option value="Power">Power</option>
+                    <option value="Modulus">Modulus</option>
+                    <option value="SquareRoot">SquareRoot</option>
                 </select>
                 <button type="submit">Create</button>
             </form>
 
             <form id="read-form" class="bread-card">
-                <h4>Read</h4>
+                <h4>Read (R)</h4>
                 <label for="read-id">Calculation ID</label>
                 <input id="read-id" name="id" type="number" step="1" min="1" required>
                 <button type="submit">Get by ID</button>
             </form>
 
             <form id="edit-form" class="bread-card">
-                <h4>Edit</h4>
+                <h4>Edit (E)</h4>
                 <label for="edit-id">Calculation ID</label>
                 <input id="edit-id" name="id" type="number" step="1" min="1" required>
-                <label for="edit-a">A</label>
+                <label for="edit-a">First Number</label>
                 <input id="edit-a" name="a" type="number" step="any" required>
-                <label for="edit-b">B</label>
+                <label for="edit-b">Second Number</label>
                 <input id="edit-b" name="b" type="number" step="any" required>
                 <label for="edit-type">Type</label>
                 <select id="edit-type" name="type" required>
@@ -364,12 +418,15 @@
                     <option value="Sub">Sub</option>
                     <option value="Multiply">Multiply</option>
                     <option value="Divide">Divide</option>
+                    <option value="Power">Power</option>
+                    <option value="Modulus">Modulus</option>
+                    <option value="SquareRoot">SquareRoot</option>
                 </select>
                 <button type="submit">Update (PUT)</button>
             </form>
 
             <form id="delete-form" class="bread-card">
-                <h4>Delete</h4>
+                <h4>Delete (D)</h4>
                 <label for="delete-id">Calculation ID</label>
                 <input id="delete-id" name="id" type="number" step="1" min="1" required>
                 <button type="submit">Delete</button>
@@ -378,9 +435,16 @@
 
         <div id="bread-feedback" class="bread-feedback hidden"></div>
     </div>
+
+    <div class="history">
+        <h3>My Saved Calculations (B - Browse)</h3>
+        <p id="history-status">Log in to view calculation history.</p>
+        <button id="refresh-history" type="button">Refresh</button>
+        <ul id="history-list"></ul>
+    </div>
     
     <script>
-        const VALID_TYPES = ['Add', 'Sub', 'Multiply', 'Divide'];
+        const VALID_TYPES = ['Add', 'Sub', 'Multiply', 'Divide', 'Power', 'Modulus', 'SquareRoot'];
 
         function showBreadFeedback(message, isError = false) {
             const feedback = document.getElementById('bread-feedback');
@@ -427,10 +491,16 @@
 
         function validateCalculationPayload(payload) {
             if (!VALID_TYPES.includes(payload.type)) {
-                throw new Error('Type must be one of: Add, Sub, Multiply, Divide.');
+                throw new Error('Type must be one of: Add, Sub, Multiply, Divide, Power, Modulus, SquareRoot.');
             }
             if (payload.type === 'Divide' && payload.b === 0) {
                 throw new Error('Cannot divide by zero.');
+            }
+            if (payload.type === 'Modulus' && payload.b === 0) {
+                throw new Error('Cannot take modulus by zero.');
+            }
+            if (payload.type === 'SquareRoot' && payload.a < 0) {
+                throw new Error('Cannot take square root of a negative number.');
             }
         }
 
@@ -692,6 +762,9 @@
                 subtract: 'Sub',
                 multiply: 'Multiply',
                 divide: 'Divide',
+                power: 'Power',
+                modulus: 'Modulus',
+                sqrt: 'SquareRoot',
             };
             const mappedType = opTypeMap[operation];
 
@@ -702,11 +775,19 @@
                 if (mappedType === 'Divide' && b === 0) {
                     throw new Error('Cannot divide by zero.');
                 }
+                if (mappedType === 'Modulus' && b === 0) {
+                    throw new Error('Cannot take modulus by zero.');
+                }
+                if (mappedType === 'SquareRoot' && a < 0) {
+                    throw new Error('Cannot take square root of a negative number.');
+                }
+
+                const body = operation === 'sqrt' ? { a } : { a, b };
 
                 const response = await fetch('/' + operation, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ a, b })
+                    body: JSON.stringify(body)
                 });
 
                 const data = await response.json();
@@ -718,10 +799,11 @@
 
                 const headers = getAuthHeaders();
                 if (mappedType && headers) {
+                    const persistedB = mappedType === 'SquareRoot' ? 0 : b;
                     await fetch('/calculations', {
                         method: 'POST',
                         headers,
-                        body: JSON.stringify({ a, b, type: mappedType }),
+                        body: JSON.stringify({ a, b: persistedB, type: mappedType }),
                     });
                     await loadCalculations();
                 }

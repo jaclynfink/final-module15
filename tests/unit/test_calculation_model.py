@@ -27,11 +27,17 @@ def test_calculation_model_computed_result_for_supported_operations() -> None:
     subtract_calc = Calculation(a=10, b=5, type=CalculationType.SUB.value)
     multiply_calc = Calculation(a=10, b=5, type=CalculationType.MULTIPLY.value)
     divide_calc = Calculation(a=10, b=5, type=CalculationType.DIVIDE.value)
+    power_calc = Calculation(a=2, b=3, type=CalculationType.POWER.value)
+    modulus_calc = Calculation(a=10, b=3, type=CalculationType.MODULUS.value)
+    sqrt_calc = Calculation(a=9, b=0, type=CalculationType.SQUARE_ROOT.value)
 
     assert add_calc.computed_result == 15
     assert subtract_calc.computed_result == 5
     assert multiply_calc.computed_result == 50
     assert divide_calc.computed_result == 2
+    assert power_calc.computed_result == 8
+    assert modulus_calc.computed_result == 1
+    assert sqrt_calc.computed_result == 3
 
 
 def test_calculation_model_resolved_result_prefers_stored_result() -> None:
@@ -44,4 +50,18 @@ def test_calculation_model_computed_result_rejects_divide_by_zero() -> None:
     calc = Calculation(a=10, b=0, type=CalculationType.DIVIDE.value)
 
     with pytest.raises(ValueError, match="divide by zero"):
+        _ = calc.computed_result
+
+
+def test_calculation_model_computed_result_rejects_modulus_by_zero() -> None:
+    calc = Calculation(a=10, b=0, type=CalculationType.MODULUS.value)
+
+    with pytest.raises(ValueError, match="modulus by zero"):
+        _ = calc.computed_result
+
+
+def test_calculation_model_computed_result_rejects_square_root_negative() -> None:
+    calc = Calculation(a=-1, b=0, type=CalculationType.SQUARE_ROOT.value)
+
+    with pytest.raises(ValueError, match="square root"):
         _ = calc.computed_result

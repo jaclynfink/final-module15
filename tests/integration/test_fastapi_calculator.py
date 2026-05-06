@@ -152,3 +152,38 @@ def test_divide_by_zero_api(client):
     # Assert that the 'error' field contains the correct error message
     assert "Cannot divide by zero!" in response.json()['error'], \
         f"Expected error message 'Cannot divide by zero!', got '{response.json()['error']}'"
+
+
+def test_power_api(client):
+    response = client.post('/power', json={'a': 2, 'b': 3})
+
+    assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
+    assert response.json()['result'] == 8, f"Expected result 8, got {response.json()['result']}"
+
+
+def test_modulus_api(client):
+    response = client.post('/modulus', json={'a': 10, 'b': 3})
+
+    assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
+    assert response.json()['result'] == 1, f"Expected result 1, got {response.json()['result']}"
+
+
+def test_modulus_by_zero_api(client):
+    response = client.post('/modulus', json={'a': 10, 'b': 0})
+
+    assert response.status_code == 400, f"Expected status code 400, got {response.status_code}"
+    assert 'error' in response.json(), "Response JSON does not contain 'error' field"
+
+
+def test_square_root_api(client):
+    response = client.post('/sqrt', json={'a': 9})
+
+    assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
+    assert response.json()['result'] == 3, f"Expected result 3, got {response.json()['result']}"
+
+
+def test_square_root_negative_api(client):
+    response = client.post('/sqrt', json={'a': -9})
+
+    assert response.status_code == 400, f"Expected status code 400, got {response.status_code}"
+    assert 'error' in response.json(), "Response JSON does not contain 'error' field"

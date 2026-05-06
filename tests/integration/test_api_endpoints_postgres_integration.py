@@ -149,7 +149,7 @@ def test_calculation_invalid_payload_returns_error_response(api_client: TestClie
 
     invalid_type_response = api_client.post(
         "/calculations",
-        json={"a": 10, "b": 2, "type": "Power"},
+        json={"a": 10, "b": 2, "type": "UnknownType"},
         headers=headers,
     )
     assert invalid_type_response.status_code == 400

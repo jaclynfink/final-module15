@@ -14,6 +14,9 @@ class CalculationType(str, Enum):
     SUB = "Sub"
     MULTIPLY = "Multiply"
     DIVIDE = "Divide"
+    POWER = "Power"
+    MODULUS = "Modulus"
+    SQUARE_ROOT = "SquareRoot"
 
 
 class Calculation(Base):
@@ -26,12 +29,20 @@ class Calculation(Base):
     __tablename__ = "calculations"
     __table_args__ = (
         CheckConstraint(
-            "type IN ('Add', 'Sub', 'Multiply', 'Divide')",
+            "type IN ('Add', 'Sub', 'Multiply', 'Divide', 'Power', 'Modulus', 'SquareRoot')",
             name="ck_calculations_type_allowed",
         ),
         CheckConstraint(
             "type != 'Divide' OR b != 0",
             name="ck_calculations_divide_nonzero",
+        ),
+        CheckConstraint(
+            "type != 'Modulus' OR b != 0",
+            name="ck_calculations_modulus_nonzero",
+        ),
+        CheckConstraint(
+            "type != 'SquareRoot' OR a >= 0",
+            name="ck_calculations_sqrt_nonnegative",
         ),
     )
 

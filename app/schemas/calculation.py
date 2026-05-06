@@ -1,5 +1,5 @@
 from enum import Enum
-from math import isclose, isfinite
+from math import isclose, isfinite, sqrt
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -11,6 +11,9 @@ class CalculationType(str, Enum):
     SUB = "Sub"
     MULTIPLY = "Multiply"
     DIVIDE = "Divide"
+    POWER = "Power"
+    MODULUS = "Modulus"
+    SQUARE_ROOT = "SquareRoot"
 
 
 def _compute_result(a: float, b: float, calculation_type: CalculationType) -> float:
@@ -22,6 +25,12 @@ def _compute_result(a: float, b: float, calculation_type: CalculationType) -> fl
         return a * b
     if calculation_type == CalculationType.DIVIDE:
         return a / b
+    if calculation_type == CalculationType.POWER:
+        return a**b
+    if calculation_type == CalculationType.MODULUS:
+        return a % b
+    if calculation_type == CalculationType.SQUARE_ROOT:
+        return sqrt(a)
     raise ValueError(f"Unsupported calculation type: {calculation_type}")
 
 
@@ -48,10 +57,21 @@ class CalculationBase(BaseModel):
             "mul": CalculationType.MULTIPLY,
             "divide": CalculationType.DIVIDE,
             "div": CalculationType.DIVIDE,
+            "power": CalculationType.POWER,
+            "pow": CalculationType.POWER,
+            "exponentiate": CalculationType.POWER,
+            "modulus": CalculationType.MODULUS,
+            "mod": CalculationType.MODULUS,
+            "modulo": CalculationType.MODULUS,
+            "squareroot": CalculationType.SQUARE_ROOT,
+            "square_root": CalculationType.SQUARE_ROOT,
+            "sqrt": CalculationType.SQUARE_ROOT,
         }
         normalized = mapping.get(value.strip().lower())
         if normalized is None:
-            raise ValueError("type must be one of: Add, Sub, Multiply, Divide.")
+            raise ValueError(
+                "type must be one of: Add, Sub, Multiply, Divide, Power, Modulus, SquareRoot."
+            )
         return normalized
 
     @model_validator(mode="after")
@@ -60,6 +80,10 @@ class CalculationBase(BaseModel):
             raise ValueError("Operands must be finite numbers.")
         if self.type == CalculationType.DIVIDE and self.b == 0:
             raise ValueError("Division by zero is not allowed for type='Divide'.")
+        if self.type == CalculationType.MODULUS and self.b == 0:
+            raise ValueError("Modulus by zero is not allowed for type='Modulus'.")
+        if self.type == CalculationType.SQUARE_ROOT and self.a < 0:
+            raise ValueError("Square root is only defined for non-negative values of 'a'.")
         return self
 
 
@@ -99,6 +123,10 @@ class CalculationUpdate(BaseModel):
     def validate_operands_when_dividing(self) -> "CalculationUpdate":
         if self.type == CalculationType.DIVIDE and self.b == 0:
             raise ValueError("Division by zero is not allowed for type='Divide'.")
+        if self.type == CalculationType.MODULUS and self.b == 0:
+            raise ValueError("Modulus by zero is not allowed for type='Modulus'.")
+        if self.type == CalculationType.SQUARE_ROOT and self.a is not None and self.a < 0:
+            raise ValueError("Square root is only defined for non-negative values of 'a'.")
 
         if self.result is not None and not isfinite(self.result):
             raise ValueError("Result must be a finite number.")

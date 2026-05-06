@@ -45,12 +45,28 @@ def test_calculation_create_accepts_case_insensitive_type_string() -> None:
 
 def test_calculation_create_rejects_invalid_type_string() -> None:
     with pytest.raises(ValidationError):
-        CalculationCreate(a=9, b=3, type="modulo")
+        CalculationCreate(a=9, b=3, type="unknown")
 
 
 def test_calculation_create_rejects_non_positive_user_id() -> None:
     with pytest.raises(ValidationError):
         CalculationCreate(a=9, b=3, type="add", user_id=0)
+
+
+def test_calculation_create_accepts_power_type() -> None:
+    payload = CalculationCreate(a=2, b=3, type="power")
+
+    assert payload.type == CalculationType.POWER
+
+
+def test_calculation_create_rejects_modulus_by_zero() -> None:
+    with pytest.raises(ValidationError):
+        CalculationCreate(a=10, b=0, type="modulus")
+
+
+def test_calculation_create_rejects_square_root_negative_a() -> None:
+    with pytest.raises(ValidationError):
+        CalculationCreate(a=-4, b=0, type="sqrt")
 
 
 def test_calculation_read_supports_orm_model_validation() -> None:

@@ -18,6 +18,7 @@ These functions can be imported and used in other modules or integrated into API
 to perform arithmetic operations based on user input.
 """
 
+from math import sqrt
 from typing import Union  # Import Union for type hinting multiple possible types
 
 from app.operations.factory import (
@@ -25,7 +26,10 @@ from app.operations.factory import (
     CalculationFactory,
     CalculationStrategy,
     DivideStrategy,
+    ExponentiateStrategy,
+    ModulusStrategy,
     MultiplyStrategy,
+    SquareRootStrategy,
     SubtractStrategy,
 )
 
@@ -129,16 +133,41 @@ def divide(a: Number, b: Number) -> float:
     return result
 
 
+def exponentiate(a: Number, b: Number) -> float:
+    """Raise `a` to the power of `b`."""
+    return float(a**b)
+
+
+def modulus(a: Number, b: Number) -> float:
+    """Return remainder of `a` divided by `b`."""
+    if b == 0:
+        raise ValueError("Cannot take modulus by zero!")
+    return float(a % b)
+
+
+def square_root(a: Number) -> float:
+    """Return square root of `a`."""
+    if a < 0:
+        raise ValueError("Cannot compute square root of a negative number!")
+    return float(sqrt(a))
+
+
 __all__ = [
     "Number",
     "add",
     "subtract",
     "multiply",
     "divide",
+    "exponentiate",
+    "modulus",
+    "square_root",
     "CalculationStrategy",
     "AddStrategy",
     "SubtractStrategy",
     "MultiplyStrategy",
     "DivideStrategy",
+    "ExponentiateStrategy",
+    "ModulusStrategy",
+    "SquareRootStrategy",
     "CalculationFactory",
 ]

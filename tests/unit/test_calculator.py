@@ -2,7 +2,7 @@
 
 import pytest  # Import the pytest framework for writing and running tests
 from typing import Union  # Import Union for type hinting multiple possible types
-from app.operations import add, subtract, multiply, divide  # Import the calculator functions from the operations module
+from app.operations import add, divide, exponentiate, modulus, multiply, square_root, subtract  # Import calculator functions
 
 # Define a type alias for numbers that can be either int or float
 Number = Union[int, float]
@@ -232,3 +232,53 @@ def test_divide_by_zero() -> None:
     # Assert that the exception message contains the expected error message
     assert "Cannot divide by zero!" in str(excinfo.value), \
         f"Expected error message 'Cannot divide by zero!', but got '{excinfo.value}'"
+
+
+@pytest.mark.parametrize(
+    "a, b, expected",
+    [
+        (2, 3, 8.0),
+        (4, 0.5, 2.0),
+        (-2, 3, -8.0),
+    ],
+)
+def test_exponentiate(a: Number, b: Number, expected: float) -> None:
+    assert exponentiate(a, b) == expected
+
+
+@pytest.mark.parametrize(
+    "a, b, expected",
+    [
+        (10, 3, 1.0),
+        (10.5, 3, 1.5),
+        (-10, 3, 2.0),
+    ],
+)
+def test_modulus(a: Number, b: Number, expected: float) -> None:
+    assert modulus(a, b) == expected
+
+
+def test_modulus_by_zero() -> None:
+    with pytest.raises(ValueError) as excinfo:
+        modulus(6, 0)
+
+    assert "Cannot take modulus by zero!" in str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "a, expected",
+    [
+        (9, 3.0),
+        (2.25, 1.5),
+        (0, 0.0),
+    ],
+)
+def test_square_root(a: Number, expected: float) -> None:
+    assert square_root(a) == expected
+
+
+def test_square_root_negative() -> None:
+    with pytest.raises(ValueError) as excinfo:
+        square_root(-1)
+
+    assert "Cannot compute square root of a negative number!" in str(excinfo.value)

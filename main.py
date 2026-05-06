@@ -14,7 +14,15 @@ from app.database import get_db, init_db
 from app.models.calculation import Calculation
 from app.models.user import User
 from app.operations.factory import CalculationFactory
-from app.operations import add, subtract, multiply, divide  # Ensure correct import path
+from app.operations import (
+    add,
+    divide,
+    exponentiate,
+    modulus,
+    multiply,
+    square_root,
+    subtract,
+)  # Ensure correct import path
 from app.schemas.calculation import CalculationCreate, CalculationRead, CalculationUpdate
 from app.schemas.user import UserAuthResponse, UserCreate, UserLogin, UserRead
 from app.security import create_access_token, decode_access_token, hash_password, verify_password
@@ -46,6 +54,16 @@ class OperationRequest(BaseModel):
     def validate_numbers(cls, value):
         if not isinstance(value, (int, float)):
             raise ValueError('Both a and b must be numbers.')
+        return value
+
+
+class SingleOperationRequest(BaseModel):
+    a: float = Field(..., description="The number")
+
+    @field_validator('a')
+    def validate_number(cls, value):
+        if not isinstance(value, (int, float)):
+            raise ValueError('a must be a number.')
         return value
 
 # Pydantic model for successful response
@@ -179,6 +197,45 @@ async def divide_route(operation: OperationRequest):
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Divide Operation Internal Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@app.post("/power", response_model=OperationResponse, responses={400: {"model": ErrorResponse}})
+async def power_route(operation: OperationRequest):
+    """Raise `a` to the power of `b`."""
+    try:
+        result = exponentiate(operation.a, operation.b)
+        return OperationResponse(result=result)
+    except Exception as e:
+        logger.error(f"Power Operation Error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/modulus", response_model=OperationResponse, responses={400: {"model": ErrorResponse}})
+async def modulus_route(operation: OperationRequest):
+    """Calculate `a % b`."""
+    try:
+        result = modulus(operation.a, operation.b)
+        return OperationResponse(result=result)
+    except ValueError as e:
+        logger.error(f"Modulus Operation Error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Modulus Operation Internal Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@app.post("/sqrt", response_model=OperationResponse, responses={400: {"model": ErrorResponse}})
+async def square_root_route(operation: SingleOperationRequest):
+    """Calculate square root of `a`."""
+    try:
+        result = square_root(operation.a)
+        return OperationResponse(result=result)
+    except ValueError as e:
+        logger.error(f"Square Root Operation Error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Square Root Operation Internal Error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 

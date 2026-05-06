@@ -11,6 +11,22 @@ A FastAPI project with a SQLAlchemy `User` model, Pydantic schemas, password has
   - Add: `POST /calculations`
   - Edit: `PUT /calculations/{id}`
   - Delete: `DELETE /calculations/{id}`
+- **Calculator operations available**
+  - Add (`Add`)
+  - Subtract (`Sub`)
+  - Multiply (`Multiply`)
+  - Divide (`Divide`)
+  - Power (`Power`)
+  - Modulus (`Modulus`)
+  - Square Root (`SquareRoot`)
+- **Operation endpoints**
+  - `POST /add`
+  - `POST /subtract`
+  - `POST /multiply`
+  - `POST /divide`
+  - `POST /power`
+  - `POST /modulus`
+  - `POST /sqrt`
 - **Playwright** end-to-end browser testing
 - **SQLAlchemy** ORM user model
   - `username`
@@ -93,6 +109,12 @@ Run only the new calculation-focused unit tests (factory, schema validation, and
 
 ```bash
 pytest -q tests/unit/test_calculation_factory.py tests/unit/test_calculation_model.py tests/unit/test_calculation_schemas.py
+```
+
+Run operation endpoint/unit behavior (including power, modulus, and square root):
+
+```bash
+pytest -q tests/unit/test_calculator.py tests/integration/test_fastapi_calculator.py
 ```
 
 ### Integration tests (requires Postgres)
@@ -237,8 +259,10 @@ uvicorn main:app --reload
 
 ### 5) Manual negative tests
 
-- POST /calculations with invalid type (for example type: "Power") should return 400.
+- POST /calculations with invalid type (for example type: "UnknownType") should return 400.
 - POST /calculations with Divide and b=0 should return 400.
+- POST /calculations with Modulus and b=0 should return 400.
+- POST /calculations with SquareRoot and negative a should return 400.
 - GET /calculations without Bearer token should return 401.
 - POST /users/login with wrong password should return 401.
 
